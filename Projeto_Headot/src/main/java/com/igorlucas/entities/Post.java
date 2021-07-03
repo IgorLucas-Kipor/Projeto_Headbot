@@ -1,19 +1,13 @@
 package com.igorlucas.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Post {
-	
-	public Post() {}
-	
-	public Post(long userId, long id, String title, String body) {
-		super();
-		this.userId = userId;
-		this.id = id;
-		this.title = title;
-		this.body = body;
-	}
 
 	private long userId;
 	

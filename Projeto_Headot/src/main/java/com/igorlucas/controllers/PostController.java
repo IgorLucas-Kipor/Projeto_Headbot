@@ -1,5 +1,6 @@
 package com.igorlucas.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,25 +19,45 @@ public class PostController {
 	@Autowired
 	private PostService postService;
 
-	
 	@GetMapping("/")
-	public ModelAndView listagem() {
-	    ModelAndView modelAndView = new ModelAndView();
-	    modelAndView.setViewName("listagem");
-	    return modelAndView;
+	public String listagem() {
+	    return "listagem";
 	}
 	
 	@PostMapping("**/listar")
-	public ModelAndView listarPosts(@RequestParam("idredator") String idredator ){
+	public ModelAndView listarPosts(@RequestParam("idredator") String idRedator ){
 		
-		Long id = Long.valueOf(idredator);
+		boolean validValue = isNumeric(idRedator);
 		
-		List<Post> postagens = postService.listarPosts(id);
+		List<Post> postagens = new ArrayList<>();
+		
+		if (validValue == true) {
+			Long id = Long.valueOf(idRedator);
+			postagens = postService.listarPosts(id);
+		} else {
+			postagens.add(postService.mensagemErro(postagens, "Valor inválido.", "O id inserido é inválido."
+					+ " Por favor, tente inserir outro valor."));
+		}
 		
 		ModelAndView modelAndView = new ModelAndView("listagem");
 		
 		modelAndView.addObject("posts", postagens);
 		return modelAndView;
+	}
+	
+	
+	//-----------------------Métodos Auxiliares------------------------
+	
+	public static boolean isNumeric(String givenString) {
+	    if (givenString == null) {
+	        return false;
+	    }
+	    try {
+	        Long l = Long.valueOf(givenString);
+	    } catch (NumberFormatException e) {
+	        return false;
+	    }
+	    return true;
 	}
 
 }
