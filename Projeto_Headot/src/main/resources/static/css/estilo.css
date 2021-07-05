@@ -1,18 +1,21 @@
 * {
-  background-color: #f8f8f8;
-  color: #29292E;
+	background-color: #f8f8f8;
+	color: #29292E;
 }
 
 body {
 	font-family: 'Helvetica', sans-serif;
-	}
+	display: flex;
+	flex-direction: column;
+	height:100vh;
+	margin:0;
+}
 
 h1 {
 	font-family: 800 'Roboto', sans-serif;
 	font-size: 50px;
 	font-weight: bold;
 }
-
 
 label {
 	font-family: 'Verdana', sans-serif;
@@ -22,8 +25,6 @@ label {
 
 main {
 	padding: 0 1em;
-	height: 90vh;
-	width: 90vw;
 	position: relative;
 }
 
@@ -39,7 +40,13 @@ table {
 
 main section table, main section table th, main section table td {
 	border: 3px solid #eee;
-	padding: 10px 15px; 
+	padding: 10px 15px;
 }
 
-
+footer {
+	margin-top:auto;
+	font-family: 'Arial', sans-serif;
+	font-size: 11px;
+	text-align: right;
+	line-height: 30px;
+}
