@@ -6,7 +6,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width" />
 
-<title>Projeto Headot</title>
+<title>Project Headot</title>
 
 <link rel="stylesheet" th:href="@{/css/estilo.css}" />
 
@@ -16,7 +16,7 @@
 
 	<main>
 		<header>
-			<h1>Filtragem de IDs</h1>
+			<h1>Filtering IDs</h1>
 		</header>
 
 		<section>
@@ -34,30 +34,30 @@
 					<br />
 					<br />
 
-					<form action="listar" method="post">
+					<form action="list" method="post">
 						<label>Pesquisa por ID do Redator</label>
 						<br /> 
 						<br />
-						<input name="idredator" placeholder="Insira o Id do Redator">
-							<input type="submit" value="Realizar Busca">
+						<input name="userId" placeholder="Insert User Id">
+							<input type="submit" value="Search">
 					</form>
 					<br />
 					<br />
 
 					<tr th:each="post: ${posts}">
-						<td th:text="${post.userId}">Placeholder uID</td>
+						<td th:text="${post.userId}"></td>
 
-						<td th:text="${post.id}">Placeholder ID</td>
+						<td th:text="${post.id}"></td>
 
-						<td th:text="${post.title}">Placeholder Title</td>
+						<td th:text="${post.title}"></td>
 
-						<td th:text="${post.body}">Placeholder Body</td>
+						<td th:text="${post.body}"></td>
 					</tr>
 				</tbody>
 			</table>
 		</section>
 	</main>
-	<footer>@Desenvolvido por Igor Lucas</footer>
+	<footer>@Developed by Igor Lucas</footer>
 </body>
 
 </html>

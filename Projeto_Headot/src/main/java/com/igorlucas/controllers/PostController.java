@@ -13,10 +13,10 @@ import com.igorlucas.entities.Post;
 import com.igorlucas.services.PostService;
 
 /**
- * A classe PostController tem como interesse fazer o controle das atividades relativas ao post, ou seja,
- * retornar os diversos modelos que são usados para a distribuição das informações nas páginas HTML em seus diversos endpoints.
- * Sendo uma classe controladora, PostController inclui um mínimo de lógica operacional, sendo a maior parte dessa
- * delegada às classes de Service.
+ * The PostController class means to control activities related to posts, returning the many models
+ * used to deliver information to HTML pages in their many endpoints.
+ * Being a controller class, PostController aims to have as little operational logic as possible,
+ * the majority of which is delegated to the Service classes.
  * @author Igor Lucas
  *
  */
@@ -24,34 +24,34 @@ import com.igorlucas.services.PostService;
 public class PostController {
 	
 	/**
-	 * Faz a injeção de um PostService na classe, para que esse PostService seja responsável
-	 * por gerenciar a maior parte da lógica implementada.
+	 * Injects a PostService in the class, so that it may be responsible for managing
+	 * most of the implemented logic.
 	 */
 	@Autowired
 	private PostService postService;
 
 	/**
-	 * Determina a página a ser aberta ao se acessar a aplicação no localhost
-	 * @return Um string do nome da página ao ser aberta inicialmente
+	 * Set's the page to be accessed when opening the application at the localhost.
+	 * @return A string with the name of the page to be accessed.
 	 */
 	@GetMapping("/")
-	public String paginaInicial() {
+	public String mainPage() {
 	    return "listagem";
 	}
 	
 	/**
-	 * Lista todos os posts feitos por um determinado redator em uma página html, no endpoint 'listar'
-	 * @param idRedator O id do redator dos posts desejados, colhido a partir do campo input do formulário HTML
-	 * @return Os posts do redator na forma de um ModelAndView, devidamente formatados no HTML
+	 * Lists all posts made by a given user in a HTML page, at the 'list' endpoint
+	 * @param userId The id of the user who created the desired posts, taken from the input field at the HTML form.
+	 * @return The posts made by user in the shape of a ModelAndView, to be formatted in the HTML
 	 */
-	@PostMapping("**/listar")
-	public ModelAndView listarPosts(@RequestParam("idredator") String idRedator ){
+	@PostMapping("**/list")
+	public ModelAndView listPosts(@RequestParam("userId") String userId ){
 		
-		List<Post> postagens = postService.montarLista(idRedator);
+		List<Post> posts = postService.createList(userId);
 		
 		ModelAndView modelAndView = new ModelAndView("listagem");
 		
-		modelAndView.addObject("posts", postagens);
+		modelAndView.addObject("posts", posts);
 		return modelAndView;
 	}
 

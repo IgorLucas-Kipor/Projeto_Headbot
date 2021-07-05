@@ -14,9 +14,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.igorlucas.entities.Post;
 
 /**
- * A classe PostService é responsável por cuidar da lógica operacional envolvendo o funcionamento de posts na API.
- * As regras de negócio gerais implementadas no projeto são trabalhadas aqui e na classe GeneralService, deixando
- * um mínimo de lógica operacional sob os cuidados de PostController.
+ * The PostService class is responsible for handling all the operational logic involving posts in the API.
+ * The business rules implemented in the project are present here and in the GeneralService class, letting
+ * as few as possible of the operational logic under the care of Post Controller.
  * @author Igor Lucas
  *
  */
@@ -24,54 +24,53 @@ import com.igorlucas.entities.Post;
 public class PostService {
 
 	/**
-	 * Lista todos os posts encontrados na URI a partir do userId passado, retornando uma mensagem de erro caso a lista
-	 * seja vazia.
-	 * @param id O userId do qual se deseja os posts
-	 * @return A lista dos posts associados ao userId passado
+	 * Lists all posts founds at the URI using the given userId, returning a error message if the list is empty.
+	 * @param id The userId from which to collect posts.
+	 * @return The list of posts associated with the given userId.
 	 */
-	public List<Post> listarPosts(Long id) {
+	public List<Post> listPosts(Long id) {
 
-		UriComponents uri = criarUri("https", "jsonplaceholder.typicode.com/", "posts/");
+		UriComponents uri = generateUri("https", "jsonplaceholder.typicode.com/", "posts/");
 
-		List<Post> listaTemporaria = gerarLista(uri);
+		List<Post> tempList = generateList(uri);
 
-		List<Post> listaDesejada = filtrarLista(listaTemporaria, id);
+		List<Post> desiredList = filterList(tempList, id);
 
-		if (listaDesejada.isEmpty()) {
-			listaDesejada.add(mensagemErro("Lista vazia",
-					"A lista não possui o id requisitado." + " Por favor, tente outro valor."));
+		if (desiredList.isEmpty()) {
+			desiredList.add(errorMessage("Empty list",
+					"The list does not have the posts made by the given id. Please, try another value."));
 		}
 
-		return listaDesejada;
+		return desiredList;
 
 	}
 
 	// --------------------Métodos Auxiliares---------------------------
 
 	/**
-	 * Cria uma URI a partir das informações de esquema, hospedeiro e caminho do endereço
-	 * @param esquema O esquema do endereço
-	 * @param hospedeiro O hospedeiro do endereço
-	 * @param caminho O caminho do endereço
-	 * @return A uri gerada
+	 * Creates a URI using informations of scheme, host and path from the address.
+	 * @param scheme The address scheme
+	 * @param host The address host
+	 * @param path The address path
+	 * @return The generated URI
 	 */
-	public UriComponents criarUri(String esquema, String hospedeiro, String caminho) {
+	public UriComponents generateUri(String scheme, String host, String path) {
 		return UriComponentsBuilder
 				.newInstance()
-				.scheme(esquema)
-				.host(hospedeiro)
-				.path(caminho)
+				.scheme(scheme)
+				.host(host)
+				.path(path)
 				.build();
 	}
 
 	/**
-	 * Cria uma lista de posts a partir dos JSON fornecidos pela página.
-	 * Primeiramente acessa a URI através de um RestTemplate, retirando as informações da mesma na forma de Array
-	 * e depois os convertendo em lista através da função Arrays.asList
-	 * @param uri O endereço do qual serão retiradas as informações
-	 * @return Uma lista com todos os posts contidos no endereço
+	 * Creates a list of posts using the JSON given by the page.
+	 * First, access the URI using a RestTemplate, taking informations using a Array, and then
+	 * converts it to a list using Arrays.asList
+	 * @param uri The address from which the information will be taken
+	 * @return A list with as posts in the address
 	 */
-	public List<Post> gerarLista(UriComponents uri) {
+	public List<Post> generateList(UriComponents uri) {
 		RestTemplate restTemplate = new RestTemplate();
 
 		ResponseEntity<Post[]> posts = restTemplate.getForEntity(uri.toUriString(), Post[].class);
@@ -80,13 +79,13 @@ public class PostService {
 	}
 
 	/**
-	 * Percorre a lista, identificando todos usuários que possuem o id passado e retornando uma lista composta
-	 * apenas pelos posts feitos por esse usuário
-	 * @param list A lista a percorrer
-	 * @param id O id do usuário a ser buscado
-	 * @return Uma lista formada apenas pelos posts desse usuário
+	 * Roams the list, identifying the user that possess the given id and returning a list made only
+	 * by this user's posts.
+	 * @param list The list to be searched
+	 * @param id The id of the user to be found
+	 * @return A list made only by posts of this user
 	 */
-	public List<Post> filtrarLista(List<Post> list, Long id) {
+	public List<Post> filterList(List<Post> list, Long id) {
 		return list
 				.stream()
 				.filter(post -> post.getUserId() == id)
@@ -94,42 +93,42 @@ public class PostService {
 	}
 
 	/**
-	 * Cria uma mensagem de erro customizada. A mensagem é exibida como um post com userId e id igual a -1,
-	 * contendo como título e mensagem as especificações do erro
-	 * @param titulo O erro que ocorreu
-	 * @param mensagem Mensagem detalhando o que causou o erro e que ações tomar
-	 * @return O post contendo a mensagem de erro
+	 * Generates a custom error message. The message is shown as a post with userId e Id of -1, containing
+	 * as a title and message specifications about the error.
+	 * @param title What error occurred
+	 * @param message A message detailing what led to the error and what actions to take
+	 * @return A post containing the error message
 	 */
-	public Post mensagemErro(String titulo, String mensagem) {
-		Post erro = new Post(-1L, -1L, titulo, mensagem);
-		return erro;
+	public Post errorMessage(String title, String message) {
+		Post error = new Post(-1L, -1L, title, message);
+		return error;
 	}
 	
 	/**
-	 * Verifica se o id do redator recebido é válido e montar uma lista conforme o caso,
-	 * gerando uma lista que ou contém todos os posts desse redator, ou uma lista que contém
-	 * uma única mensagem de erro.
-	 * @param idRedator O id do redator do qual se deseja obter os posts
-	 * @return Uma lista de posts contendo todos os posts do redator passado ou uma mensagem de erro
+	 * Verifies if the given user id is valid and generates a list according to each case,
+	 * generating a list that either contains all this user's posts, or a list containing
+	 * a single error message.
+	 * @param userId The id of the user from which the posts are desired
+	 * @return A list of posts containing either all of the user's posts or a single error message
 	 */
-	public List<Post> montarLista(String idRedator) {
+	public List<Post> createList(String userId) {
 		
-		boolean valorValido = GeneralService.isNumeric(idRedator);
+		boolean validValue = GeneralService.isNumeric(userId);
 		
-		List<Post> postagens = new ArrayList<>();
+		List<Post> posts = new ArrayList<>();
 		
-		if (valorValido == true) {
-			Long id = Long.valueOf(idRedator);
-			postagens = listarPosts(id);
-		} else if (idRedator.isEmpty()) {
-			postagens.add(mensagemErro("Sem valor", "Não foi inserido id a pesquisar. "
-					+ " Por favor, insira um id válido."));
+		if (validValue == true) {
+			Long id = Long.valueOf(userId);
+			posts = listPosts(id);
+		} else if (userId.isEmpty()) {
+			posts.add(errorMessage("No value", "There was given no id to search. "
+					+ " Please, insert a valid id.."));
 		} else {
-			postagens.add(mensagemErro("Valor inválido", "O id inserido é inválido."
-					+ " Por favor, tente inserir outro valor."));
+			posts.add(errorMessage("Invalid value", "The given id is invalid."
+					+ " Please, try another value."));
 		}
 		
-		return postagens;
+		return posts;
 	}
 
 }
